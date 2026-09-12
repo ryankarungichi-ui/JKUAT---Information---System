@@ -1,0 +1,133 @@
+PHASE 1: SYSTEM ANALYSIS
+
+1. Introduction
+
+The JKUAT Information System is a proposed system designed to help manage information concerning students, lecturers and non-teaching staff.
+
+The system will connect the Student Portal and Learning Management System (LMS) so that important academic information can be shared between the two systems.
+
+ 2. Problem Statement
+
+The university requires an efficient way of managing student and lecturer information. Students need to register units through the official Student Portal and access the same units through the LMS.
+
+Lecturers also need to upload learning materials, create assignments and CATs, and enter student marks. The marks entered by lecturers should be available to students through the Student Portal.
+
+Without proper coordination between the systems, information may be duplicated, delayed or inconsistent.
+
+ 3. Main Objective
+
+To develop an information system that manages students, lecturers and academic information while improving communication between the Student Portal and LMS.
+
+4. Specific Objectives
+
+- To manage student information.
+- To manage lecturer information.
+- To allow students to register units.
+- To make registered units available on the LMS.
+- To allow lecturers to upload notes and create assessments.
+- To allow lecturers to enter student marks.
+- To make marks entered in the LMS available on the Student Portal.
+- To improve the management of academic information.
+
+5. System Users
+
+The main users of the system are:
+
+Students
+Students will be able to:
+- Log into the Student Portal.
+- Register units.
+- View registered units.
+- Access the LMS.
+- View marks and grades.
+
+Lecturers
+Lecturers will be able to:
+- Log into the system.
+- View assigned units.
+- Upload notes.
+- Create assignments.
+- Create CATs.
+- Enter student marks.
+
+Non-Teaching Staff
+
+Non-teaching staff will assist in managing administrative information and supporting university operations.
+
+6. Functional Requirements
+
+The system should be able to:
+
+1. Register and manage student accounts.
+2. Register and manage lecturer accounts.
+3. Allow students to register units.
+4. Display registered units on the LMS.
+5. Allow lecturers to manage learning materials.
+6. Allow lecturers to enter student marks.
+7. Display student marks through the Student Portal.
+8. Allow users to log in securely.
+9. Display student grades based on marks.
+
+7. Non-Functional Requirements
+
+Security
+Only authorised users should access the system.
+
+ Reliability
+The system should provide accurate academic information.
+
+Usability
+The system should be simple and easy to use.
+
+ Performance
+The system should respond to user requests within a reasonable time.
+
+### Maintainability
+The system should be easy to update and maintain.
+
+ 8. Feasibility Study
+
+ Technical Feasibility
+
+The system can be developed using programming technologies such as C++. The project can initially be developed as a prototype and later connected to a database.
+
+Economic Feasibility
+
+The proposed system can reduce manual work and duplication of information. Open-source development tools can also be used to reduce development costs.
+
+Operational Feasibility
+
+The system is practical because students and lecturers already use university academic systems. The proposed system will improve coordination between these systems.
+
+9. Proposed System
+
+The proposed system will connect the Student Portal and LMS.
+
+The basic process will be:
+
+Student registers a unit  
+↓  
+Unit is stored in the system  
+↓  
+Registered unit becomes available on LMS  
+↓  
+Lecturer teaches the unit  
+↓  
+Lecturer enters student marks  
+↓  
+Marks are stored  
+↓  
+Student views marks through Student Portal
+
+10. Expected Benefits
+
+- Improved management of student information.
+- Better coordination between the Student Portal and LMS.
+- Reduced duplication of academic information.
+- Faster access to marks and grades.
+- Easier management of learning materials.
+- Improved communication between students and lecturers.
+
+ 11. Conclusion
+
+The proposed JKUAT Information System will provide a centralised way of managing important student and lecturer information. By coordinating the Student Portal and LMS, the system will improve the flow and consistency of academic information.
