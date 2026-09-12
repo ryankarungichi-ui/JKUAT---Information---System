@@ -1,0 +1,565 @@
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Structure for storing student information
+struct Student
+{
+    string id;
+    string name;
+    string password;
+    vector<string> units;
+};
+
+// Structure for storing lecturer information
+struct Lecturer
+{
+    string id;
+    string name;
+    string password;
+    vector<string> units;
+};
+
+// Structure for storing units
+struct Unit
+{
+    string code;
+    string name;
+    string lecturer;
+};
+
+// Structure for storing student marks
+struct Marks
+{
+    string studentId;
+    string unitCode;
+    int assignment;
+    int cat;
+    int exam;
+};
+
+vector<Student> students;
+vector<Lecturer> lecturers;
+vector<Unit> units;
+vector<Marks> marks;
+
+
+// Find a student using their ID
+int findStudent(string id)
+{
+    for (int i = 0; i < students.size(); i++)
+    {
+        if (students[i].id == id)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+
+// Find a lecturer using their ID
+int findLecturer(string id)
+{
+    for (int i = 0; i < lecturers.size(); i++)
+    {
+        if (lecturers[i].id == id)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+
+// Register a unit
+void registerUnit(int studentIndex)
+{
+    cout << "\nAvailable Units\n";
+    cout << "1. CSC210 - Object Oriented Programming\n";
+    cout << "2. SAD220 - Systems Analysis and Design\n";
+    cout << "3. NET210 - Computer Networks\n";
+
+    int choice;
+    cout << "\nSelect unit: ";
+    cin >> choice;
+
+    string unitCode;
+
+    if (choice == 1)
+    {
+        unitCode = "CSC210";
+    }
+    else if (choice == 2)
+    {
+        unitCode = "SAD220";
+    }
+    else if (choice == 3)
+    {
+        unitCode = "NET210";
+    }
+    else
+    {
+        cout << "Invalid choice.\n";
+        return;
+    }
+
+    // Check if the student already registered the unit
+    for (int i = 0; i < students[studentIndex].units.size(); i++)
+    {
+        if (students[studentIndex].units[i] == unitCode)
+        {
+            cout << "You have already registered this unit.\n";
+            return;
+        }
+    }
+
+    students[studentIndex].units.push_back(unitCode);
+
+    cout << "Unit registered successfully.\n";
+    cout << "The unit is now available on the LMS.\n";
+}
+
+
+// Display units registered by a student
+void viewUnits(int studentIndex)
+{
+    cout << "\nYour Registered Units\n";
+
+    if (students[studentIndex].units.size() == 0)
+    {
+        cout << "You have not registered any units.\n";
+        return;
+    }
+
+    for (int i = 0; i < students[studentIndex].units.size(); i++)
+    {
+        cout << students[studentIndex].units[i] << endl;
+    }
+}
+
+
+// Display marks
+void viewMarks(int studentIndex)
+{
+    bool found = false;
+
+    cout << "\nYour Marks\n";
+
+    for (int i = 0; i < marks.size(); i++)
+    {
+        if (marks[i].studentId == students[studentIndex].id)
+        {
+            found = true;
+
+            int total = marks[i].assignment +
+                        marks[i].cat +
+                        marks[i].exam;
+
+            cout << "\nUnit: " << marks[i].unitCode << endl;
+            cout << "Assignment: " << marks[i].assignment << endl;
+            cout << "CAT: " << marks[i].cat << endl;
+            cout << "Exam: " << marks[i].exam << endl;
+            cout << "Total: " << total << endl;
+
+            if (total >= 70)
+                cout << "Grade: A\n";
+            else if (total >= 60)
+                cout << "Grade: B\n";
+            else if (total >= 50)
+                cout << "Grade: C\n";
+            else if (total >= 40)
+                cout << "Grade: D\n";
+            else
+                cout << "Grade: E\n";
+        }
+    }
+
+    if (!found)
+    {
+        cout << "No marks have been entered yet.\n";
+    }
+}
+
+
+// Student LMS
+void studentLMS(int studentIndex)
+{
+    int choice;
+
+    do
+    {
+        cout << "\n===== LMS =====\n";
+        cout << "1. View Registered Units\n";
+        cout << "2. View Notes\n";
+        cout << "3. View Assignments\n";
+        cout << "4. View CATs\n";
+        cout << "5. View Marks\n";
+        cout << "6. Exit LMS\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+            case 1:
+                viewUnits(studentIndex);
+                break;
+
+            case 2:
+                cout << "\nNotes for your units are available here.\n";
+                break;
+
+            case 3:
+                cout << "\nAssignments for your units are available here.\n";
+                break;
+
+            case 4:
+                cout << "\nCATs for your units are available here.\n";
+                break;
+
+            case 5:
+                viewMarks(studentIndex);
+                break;
+
+            case 6:
+                cout << "Leaving LMS...\n";
+                break;
+
+            default:
+                cout << "Invalid choice.\n";
+        }
+
+    } while (choice != 6);
+}
+
+
+// Lecturer enters marks
+void enterMarks(int lecturerIndex)
+{
+    string unitCode;
+    string studentId;
+
+    cout << "\nEnter unit code: ";
+    cin >> unitCode;
+
+    bool teachesUnit = false;
+
+    for (int i = 0; i < lecturers[lecturerIndex].units.size(); i++)
+    {
+        if (lecturers[lecturerIndex].units[i] == unitCode)
+        {
+            teachesUnit = true;
+        }
+    }
+
+    if (!teachesUnit)
+    {
+        cout << "You are not assigned to this unit.\n";
+        return;
+    }
+
+    cout << "Enter student ID: ";
+    cin >> studentId;
+
+    int studentIndex = findStudent(studentId);
+
+    if (studentIndex == -1)
+    {
+        cout << "Student not found.\n";
+        return;
+    }
+
+    Marks newMark;
+
+    newMark.studentId = studentId;
+    newMark.unitCode = unitCode;
+
+    cout << "Enter assignment mark (out of 20): ";
+    cin >> newMark.assignment;
+
+    cout << "Enter CAT mark (out of 20): ";
+    cin >> newMark.cat;
+
+    cout << "Enter exam mark (out of 60): ";
+    cin >> newMark.exam;
+
+    if (newMark.assignment < 0 || newMark.assignment > 20 ||
+        newMark.cat < 0 || newMark.cat > 20 ||
+        newMark.exam < 0 || newMark.exam > 60)
+    {
+        cout << "Invalid marks entered.\n";
+        return;
+    }
+
+    marks.push_back(newMark);
+
+    cout << "\nMarks entered successfully.\n";
+    cout << "The marks can now be viewed through the Student Portal.\n";
+}
+
+
+// Lecturer LMS
+void lecturerLMS(int lecturerIndex)
+{
+    int choice;
+
+    do
+    {
+        cout << "\n===== LECTURER LMS =====\n";
+        cout << "1. View Units\n";
+        cout << "2. Upload Notes\n";
+        cout << "3. Create Assignment\n";
+        cout << "4. Create CAT\n";
+        cout << "5. Enter Marks\n";
+        cout << "6. Logout\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+            case 1:
+                cout << "\nYour Units:\n";
+
+                for (int i = 0;
+                     i < lecturers[lecturerIndex].units.size();
+                     i++)
+                {
+                    cout << lecturers[lecturerIndex].units[i] << endl;
+                }
+                break;
+
+            case 2:
+                cout << "Notes uploaded successfully.\n";
+                break;
+
+            case 3:
+                cout << "Assignment created successfully.\n";
+                break;
+
+            case 4:
+                cout << "CAT created successfully.\n";
+                break;
+
+            case 5:
+                enterMarks(lecturerIndex);
+                break;
+
+            case 6:
+                cout << "Logging out...\n";
+                break;
+
+            default:
+                cout << "Invalid choice.\n";
+        }
+
+    } while (choice != 6);
+}
+
+
+// Student login
+void studentLogin()
+{
+    string id;
+    string password;
+
+    cout << "\n===== STUDENT LOGIN =====\n";
+
+    cout << "Student ID: ";
+    cin >> id;
+
+    cout << "Password: ";
+    cin >> password;
+
+    int studentIndex = findStudent(id);
+
+    if (studentIndex == -1 ||
+        students[studentIndex].password != password)
+    {
+        cout << "Incorrect student ID or password.\n";
+        return;
+    }
+
+    cout << "\nWelcome " << students[studentIndex].name << "!\n";
+
+    int choice;
+
+    do
+    {
+        cout << "\n===== STUDENT PORTAL =====\n";
+        cout << "1. Register Unit\n";
+        cout << "2. View Registered Units\n";
+        cout << "3. View Marks\n";
+        cout << "4. Access LMS\n";
+        cout << "5. Logout\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+            case 1:
+                registerUnit(studentIndex);
+                break;
+
+            case 2:
+                viewUnits(studentIndex);
+                break;
+
+            case 3:
+                viewMarks(studentIndex);
+                break;
+
+            case 4:
+                studentLMS(studentIndex);
+                break;
+
+            case 5:
+                cout << "Logging out...\n";
+                break;
+
+            default:
+                cout << "Invalid choice.\n";
+        }
+
+    } while (choice != 5);
+}
+
+
+// Lecturer login
+void lecturerLogin()
+{
+    string id;
+    string password;
+
+    cout << "\n===== LECTURER LOGIN =====\n";
+
+    cout << "Lecturer ID: ";
+    cin >> id;
+
+    cout << "Password: ";
+    cin >> password;
+
+    int lecturerIndex = findLecturer(id);
+
+    if (lecturerIndex == -1 ||
+        lecturers[lecturerIndex].password != password)
+    {
+        cout << "Incorrect lecturer ID or password.\n";
+        return;
+    }
+
+    cout << "\nWelcome " << lecturers[lecturerIndex].name << "!\n";
+
+    lecturerLMS(lecturerIndex);
+}
+
+
+// Main program
+int main()
+{
+    // Sample student accounts
+    Student student1;
+
+    student1.id = "ST001";
+    student1.name = "John Kamau";
+    student1.password = "1234";
+
+    students.push_back(student1);
+
+
+    Student student2;
+
+    student2.id = "ST002";
+    student2.name = "Mary Wanjiku";
+    student2.password = "1234";
+
+    students.push_back(student2);
+
+
+    // Sample lecturer
+    Lecturer lecturer1;
+
+    lecturer1.id = "L001";
+    lecturer1.name = "Dr Mwangi";
+    lecturer1.password = "1234";
+
+    lecturer1.units.push_back("CSC210");
+    lecturer1.units.push_back("SAD220");
+
+    lecturers.push_back(lecturer1);
+
+
+    // Units in the system
+    Unit unit1;
+
+    unit1.code = "CSC210";
+    unit1.name = "Object Oriented Programming";
+    unit1.lecturer = "L001";
+
+    units.push_back(unit1);
+
+
+    Unit unit2;
+
+    unit2.code = "SAD220";
+    unit2.name = "Systems Analysis and Design";
+    unit2.lecturer = "L001";
+
+    units.push_back(unit2);
+
+
+    Unit unit3;
+
+    unit3.code = "NET210";
+    unit3.name = "Computer Networks";
+    unit3.lecturer = "L001";
+
+    units.push_back(unit3);
+
+
+    // Main menu
+    int choice;
+
+    do
+    {
+        cout << "\n====================================\n";
+        cout << "       JKUAT INFORMATION SYSTEM\n";
+        cout << "====================================\n";
+
+        cout << "1. Student Login\n";
+        cout << "2. Lecturer Login\n";
+        cout << "3. Exit\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+            case 1:
+                studentLogin();
+                break;
+
+            case 2:
+                lecturerLogin();
+                break;
+
+            case 3:
+                cout << "Thank you for using the system.\n";
+                break;
+
+            default:
+                cout << "Invalid choice.\n";
+        }
+
+    } while (choice != 3);
+
+    return 0;
+}
+
