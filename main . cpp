@@ -1,11 +1,9 @@
-
 #include <iostream>
 #include <vector>
 #include <string>
 
 using namespace std;
 
-// Structure for storing student information
 struct Student
 {
     string id;
@@ -14,7 +12,6 @@ struct Student
     vector<string> units;
 };
 
-// Structure for storing lecturer information
 struct Lecturer
 {
     string id;
@@ -23,7 +20,13 @@ struct Lecturer
     vector<string> units;
 };
 
-// Structure for storing units
+struct Staff
+{
+    string id;
+    string name;
+    string password;
+};
+
 struct Unit
 {
     string code;
@@ -31,7 +34,6 @@ struct Unit
     string lecturer;
 };
 
-// Structure for storing student marks
 struct Marks
 {
     string studentId;
@@ -43,41 +45,51 @@ struct Marks
 
 vector<Student> students;
 vector<Lecturer> lecturers;
+vector<Staff> staff;
 vector<Unit> units;
 vector<Marks> marks;
 
 
-// Find a student using their ID
+// Find student
 int findStudent(string id)
 {
     for (int i = 0; i < students.size(); i++)
     {
         if (students[i].id == id)
-        {
             return i;
-        }
     }
 
     return -1;
 }
 
 
-// Find a lecturer using their ID
+// Find lecturer
 int findLecturer(string id)
 {
     for (int i = 0; i < lecturers.size(); i++)
     {
         if (lecturers[i].id == id)
-        {
             return i;
-        }
     }
 
     return -1;
 }
 
 
-// Register a unit
+// Find staff
+int findStaff(string id)
+{
+    for (int i = 0; i < staff.size(); i++)
+    {
+        if (staff[i].id == id)
+            return i;
+    }
+
+    return -1;
+}
+
+
+// Register unit
 void registerUnit(int studentIndex)
 {
     cout << "\nAvailable Units\n";
@@ -92,24 +104,17 @@ void registerUnit(int studentIndex)
     string unitCode;
 
     if (choice == 1)
-    {
         unitCode = "CSC210";
-    }
     else if (choice == 2)
-    {
         unitCode = "SAD220";
-    }
     else if (choice == 3)
-    {
         unitCode = "NET210";
-    }
     else
     {
         cout << "Invalid choice.\n";
         return;
     }
 
-    // Check if the student already registered the unit
     for (int i = 0; i < students[studentIndex].units.size(); i++)
     {
         if (students[studentIndex].units[i] == unitCode)
@@ -126,7 +131,7 @@ void registerUnit(int studentIndex)
 }
 
 
-// Display units registered by a student
+// View registered units
 void viewUnits(int studentIndex)
 {
     cout << "\nYour Registered Units\n";
@@ -144,7 +149,7 @@ void viewUnits(int studentIndex)
 }
 
 
-// Display marks
+// View marks
 void viewMarks(int studentIndex)
 {
     bool found = false;
@@ -181,9 +186,7 @@ void viewMarks(int studentIndex)
     }
 
     if (!found)
-    {
         cout << "No marks have been entered yet.\n";
-    }
 }
 
 
@@ -253,9 +256,7 @@ void enterMarks(int lecturerIndex)
     for (int i = 0; i < lecturers[lecturerIndex].units.size(); i++)
     {
         if (lecturers[lecturerIndex].units[i] == unitCode)
-        {
             teachesUnit = true;
-        }
     }
 
     if (!teachesUnit)
@@ -363,6 +364,143 @@ void lecturerLMS(int lecturerIndex)
 }
 
 
+// STAFF FUNCTIONS
+
+void viewAllStudents()
+{
+    cout << "\n===== STUDENTS =====\n";
+
+    for (int i = 0; i < students.size(); i++)
+    {
+        cout << "ID: " << students[i].id << endl;
+        cout << "Name: " << students[i].name << endl;
+
+        cout << "Registered Units: ";
+
+        if (students[i].units.size() == 0)
+        {
+            cout << "None";
+        }
+        else
+        {
+            for (int j = 0; j < students[i].units.size(); j++)
+            {
+                cout << students[i].units[j] << " ";
+            }
+        }
+
+        cout << "\n\n";
+    }
+}
+
+
+void viewAllLecturers()
+{
+    cout << "\n===== LECTURERS =====\n";
+
+    for (int i = 0; i < lecturers.size(); i++)
+    {
+        cout << "ID: " << lecturers[i].id << endl;
+        cout << "Name: " << lecturers[i].name << endl;
+
+        cout << "Assigned Units: ";
+
+        for (int j = 0; j < lecturers[i].units.size(); j++)
+        {
+            cout << lecturers[i].units[j] << " ";
+        }
+
+        cout << "\n\n";
+    }
+}
+
+
+void viewAllUnits()
+{
+    cout << "\n===== UNIVERSITY UNITS =====\n";
+
+    for (int i = 0; i < units.size(); i++)
+    {
+        cout << units[i].code << " - "
+             << units[i].name
+             << " | Lecturer: "
+             << units[i].lecturer << endl;
+    }
+}
+
+
+void viewAcademicRecords()
+{
+    cout << "\n===== ACADEMIC RECORDS =====\n";
+
+    if (marks.size() == 0)
+    {
+        cout << "No academic records available.\n";
+        return;
+    }
+
+    for (int i = 0; i < marks.size(); i++)
+    {
+        int total = marks[i].assignment +
+                    marks[i].cat +
+                    marks[i].exam;
+
+        cout << "\nStudent ID: " << marks[i].studentId << endl;
+        cout << "Unit: " << marks[i].unitCode << endl;
+        cout << "Total Mark: " << total << endl;
+    }
+}
+
+
+// Staff menu
+void staffMenu(int staffIndex)
+{
+    int choice;
+
+    do
+    {
+        cout << "\n===== STAFF MODULE =====\n";
+        cout << "Welcome " << staff[staffIndex].name << "!\n\n";
+
+        cout << "1. View Students\n";
+        cout << "2. View Lecturers\n";
+        cout << "3. View Units\n";
+        cout << "4. View Academic Records\n";
+        cout << "5. Logout\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+            case 1:
+                viewAllStudents();
+                break;
+
+            case 2:
+                viewAllLecturers();
+                break;
+
+            case 3:
+                viewAllUnits();
+                break;
+
+            case 4:
+                viewAcademicRecords();
+                break;
+
+            case 5:
+                cout << "Logging out...\n";
+                break;
+
+            default:
+                cout << "Invalid choice.\n";
+        }
+
+    } while (choice != 5);
+}
+
+
 // Student login
 void studentLogin()
 {
@@ -461,10 +599,38 @@ void lecturerLogin()
 }
 
 
+// Staff login
+void staffLogin()
+{
+    string id;
+    string password;
+
+    cout << "\n===== STAFF LOGIN =====\n";
+
+    cout << "Staff ID: ";
+    cin >> id;
+
+    cout << "Password: ";
+    cin >> password;
+
+    int staffIndex = findStaff(id);
+
+    if (staffIndex == -1 ||
+        staff[staffIndex].password != password)
+    {
+        cout << "Incorrect staff ID or password.\n";
+        return;
+    }
+
+    staffMenu(staffIndex);
+}
+
+
 // Main program
 int main()
 {
-    // Sample student accounts
+    // Sample students
+
     Student student1;
 
     student1.id = "ST001";
@@ -484,6 +650,7 @@ int main()
 
 
     // Sample lecturer
+
     Lecturer lecturer1;
 
     lecturer1.id = "L001";
@@ -496,7 +663,19 @@ int main()
     lecturers.push_back(lecturer1);
 
 
-    // Units in the system
+    // Sample non-teaching staff
+
+    Staff staff1;
+
+    staff1.id = "STAFF001";
+    staff1.name = "Jane Njeri";
+    staff1.password = "1234";
+
+    staff.push_back(staff1);
+
+
+    // Units
+
     Unit unit1;
 
     unit1.code = "CSC210";
@@ -525,6 +704,7 @@ int main()
 
 
     // Main menu
+
     int choice;
 
     do
@@ -535,7 +715,8 @@ int main()
 
         cout << "1. Student Login\n";
         cout << "2. Lecturer Login\n";
-        cout << "3. Exit\n";
+        cout << "3. Staff Login\n";
+        cout << "4. Exit\n";
 
         cout << "Enter choice: ";
         cin >> choice;
@@ -551,6 +732,10 @@ int main()
                 break;
 
             case 3:
+                staffLogin();
+                break;
+
+            case 4:
                 cout << "Thank you for using the system.\n";
                 break;
 
@@ -558,8 +743,7 @@ int main()
                 cout << "Invalid choice.\n";
         }
 
-    } while (choice != 3);
+    } while (choice != 4);
 
     return 0;
 }
-
